@@ -89,12 +89,12 @@ public class MovieRestController {
         LocalDate movieRelease = movie.getDateRelease();
         String datemovie = movieRelease.toString();
         String datenow = LocalDate.now().toString();
-        movieCategory(movie, nDays(datemovie,datenow));
         LocalDate rentalDateStart = rental[0].getDateStart();
         LocalDate rentalDateFinish = rental[0].getDateFinish();
         String datestart = rentalDateStart.toString();
         String datefinish= rentalDateFinish.toString();
         payment(rental[0],datemovie,datestart,datefinish);
+        movieCategory(movie, nDays(datemovie,datenow));
     }
     @PutMapping(value = "/movies/{id}")
     public Movie updatMovieById(@PathVariable("id") int id, @RequestBody Movie movie) {
@@ -142,9 +142,9 @@ public class MovieRestController {
         Date datem = df.parse( datemovie );
         Date dates = df.parse( datestart );
         Date datee = df.parse( dateend );
-        float payment = 0;
-        float payment1 = 0;
-        float payment2 = 0;
+        float payment ;
+        float payment1;
+        float payment2;
         LocalDate localDateMovie = datem.toInstant().atZone( ZoneId.systemDefault() ).toLocalDate();
         LocalDate localDate364 = datem.toInstant().atZone( ZoneId.systemDefault() ).toLocalDate().plusDays( 364 );
         LocalDate localDate1092 = datem.toInstant().atZone( ZoneId.systemDefault() ).toLocalDate().plusDays( 1092 );
@@ -162,20 +162,17 @@ public class MovieRestController {
         if (localDateStart.isBefore( localDate364 ) & localDateEnd.isBefore( localDate364 )| localDateEnd.isEqual( localDate364 )) {
             payment = (nDays( datestart, dateend ) * 5f / 7);
             rental.setPayment(payment);
-            rentalService.addRental(rental);
+
         }
         if ( localDateStart.isBefore( localDate364 ) & localDateEnd.isAfter( localDate364 ) & localDateEnd.isBefore( localDate1092 )| localDateStart.isEqual( localDate364 )) {
             payment1 = nDays( datestart, date364 )* 5f / 7;
             payment2 = nDays( date364, dateend )* 3.49f / 7;
             payment = payment1 + payment2;
             rental.setPayment(payment);
-            rentalService.addRental(rental);
-
         }
         if ( localDateStart.isBefore( localDate1092 ) & localDateEnd.isBefore( localDate1092 ) & localDateStart.isAfter( localDate364 )|localDateEnd.isEqual( localDate1092 )) {
             payment = nDays( datestart, dateend ) * 3.49f / 7;
             rental.setPayment(payment);
-            rentalService.addRental(rental);
         }
 
         if (localDateStart.isBefore( localDate1092 ) & localDateEnd.isAfter( localDate1092 )|localDateEnd.isEqual(localDate1092)) {
@@ -183,13 +180,12 @@ public class MovieRestController {
             payment2 = nDays( date1092, dateend )  * 1.99f / 7;
             payment = payment1 + payment2;
             rental.setPayment(payment);
-            rentalService.addRental(rental);
         }
         if (localDateStart.isAfter( localDate1092 ) & localDateEnd.isAfter( localDate1092 )|localDateStart.isEqual( localDate1092 )) {
             payment = nDays( datestart, dateend ) * 1.99f / 7;
             rental.setPayment(payment);
-            rentalService.addRental(rental);
         }
+      //  rentalService.addRental(rental);
     }
 
 

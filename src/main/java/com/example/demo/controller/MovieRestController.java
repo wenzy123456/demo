@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zaxxer.hikari.util.ConcurrentBag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -82,18 +83,18 @@ public class MovieRestController {
 
 
     @PostMapping(value = "/movies")
-    public void addMovie(@RequestBody Movie movie) throws ParseException {
-       LocalDate movieRelease = movie.getDateRelease();
+    public void addMovie(@RequestBody  Movie movie) throws ParseException {
+       Set<Rental>rentals = movie.getRentals();
+       Rental []  rental = rentals.toArray(new Rental[0]);
+        LocalDate movieRelease = movie.getDateRelease();
         String datemovie = movieRelease.toString();
         String datenow = LocalDate.now().toString();
         movieCategory(movie, nDays(datemovie,datenow));
-      //  LocalDate rentalDateStart = rental.getDateStart();
-      //  LocalDate rentalDateFinish = rental.getDateFinish();
-      // String datestart = String.valueOf(rentalDateStart);
-      //  String datefinish = String.valueOf(rentalDateFinish);
-     //   String datestart = rentalDateStart.toString();
-      //  String datefinish= rentalDateFinish.toString();
-      //  payment(rental,datemovie,datestart,datefinish);
+        LocalDate rentalDateStart = rental[0].getDateStart();
+        LocalDate rentalDateFinish = rental[0].getDateFinish();
+        String datestart = rentalDateStart.toString();
+        String datefinish= rentalDateFinish.toString();
+        payment(rental[0],datemovie,datestart,datefinish);
     }
     @PutMapping(value = "/movies/{id}")
     public Movie updatMovieById(@PathVariable("id") int id, @RequestBody Movie movie) {

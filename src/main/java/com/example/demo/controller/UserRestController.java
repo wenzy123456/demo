@@ -137,7 +137,7 @@ public class UserRestController {
             e.printStackTrace();
         }*/
 
-    @Bean
+/*    @Bean
     public List<User> dataDownload() {
         ObjectMapper objectMapper = new ObjectMapper();
         List <User> listusers = null;
@@ -150,8 +150,8 @@ public class UserRestController {
             e.printStackTrace();
         }
         return listusers;
-    }
-/* @Bean
+    }*/
+ @Bean
  public List<User> userDataDownload(){
      ObjectMapper objectMapper = new ObjectMapper();
      List<User> listusers = null;
@@ -163,7 +163,6 @@ public class UserRestController {
          e.printStackTrace();
      }
      return listusers;
- }*/
-
+ }
 
 }

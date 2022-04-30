@@ -29,12 +29,12 @@ public class Rental implements Serializable {
     private Set <Movie> movies;
 
 
-    public Rental(Long id, LocalDate dateStart, LocalDate dateFinish, float payment ) {
+    public Rental(Long id, LocalDate dateStart, LocalDate dateFinish, float payment,Set<Movie>movies ) {
         this.id = id;
         this.dateStart = dateStart;
         this.dateFinish = dateFinish;
         this.payment = payment;
-      //  this.movies=movies;
+        this.movies=movies;
 
     }
 

@@ -1,14 +1,8 @@
 package com.example.demo.entity;
 
-import com.example.demo.repository.MovieRepository;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import org.springframework.http.converter.json.GsonFactoryBean;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Set;
 
 

@@ -114,7 +114,7 @@ public class MovieRestController {
             firstDate = df.parse( firstString );
             secondDate = df.parse( secondString );
         } catch (Exception e) {
-
+System.out.println("Wrong parce");
         }
         int nDay = (int) ((secondDate.getTime() - firstDate.getTime()) / (24 * 60 * 60 * 1000));
         return nDay;
@@ -149,36 +149,37 @@ public class MovieRestController {
         LocalDate localDateEnd = datee.toInstant().atZone( ZoneId.systemDefault() ).toLocalDate();
         String date364 = localDate364.toString();
         String date1092 =localDate1092.toString();
-        float payment =0 ;
+        BigDecimal payment = BigDecimal.valueOf(0);
+
         if (nDays( datestart, dateend ) >= 365 | nDays(datestart,dateend)<0 |(localDateStart.isBefore( localDateMovie ) | localDateEnd.isBefore( localDateMovie ))) {
-            System.out.println( "Прокат невозможен" );
+            System.out.println("LAEN KEELATUD" );
             return;
 
         }
 
         if (localDateStart.isBefore( localDate364 ) & localDateEnd.isBefore( localDate364 )| localDateEnd.isEqual( localDate364 )) {
-            payment = (nDays( datestart, dateend ) * 5f / 7);
+            payment = BigDecimal.valueOf((nDays( datestart, dateend )*5f/7)).setScale(2,RoundingMode.CEILING );
             rental.setPayment(payment);
 
         }
         if ( localDateStart.isBefore( localDate364 ) & localDateEnd.isAfter( localDate364 ) & localDateEnd.isBefore( localDate1092 )| localDateStart.isEqual( localDate364 )) {
-            payment = nDays( datestart, date364 )* 5f / 7 + nDays( date364, dateend )* 3.49f / 7;
+            payment = BigDecimal.valueOf(nDays( datestart, date364 )*5f/7 + nDays( date364, dateend )* 3.49f/7).setScale(2,RoundingMode.CEILING );
             rental.setPayment(payment);
         }
         if ( localDateStart.isBefore( localDate1092 ) & localDateEnd.isBefore( localDate1092 ) & localDateStart.isAfter( localDate364 )|localDateEnd.isEqual( localDate1092 )) {
-            payment = nDays( datestart, dateend ) * 3.49f / 7;
+            payment = BigDecimal.valueOf(nDays( datestart, dateend ) * 3.49f/7).setScale(2,RoundingMode.CEILING );
             rental.setPayment(payment);
         }
 
         if (localDateStart.isBefore( localDate1092 ) & localDateEnd.isAfter( localDate1092 )|localDateEnd.isEqual(localDate1092)) {
-            payment = nDays( datestart, date1092 )* 3.49f / 7 + nDays( date1092, dateend )  * 1.99f / 7;
+            payment = BigDecimal.valueOf(nDays( datestart, date1092 )* 3.49f/7 + nDays( date1092, dateend )*1.99f/7).setScale(2,RoundingMode.CEILING );
             rental.setPayment(payment);
         }
         if (localDateStart.isAfter( localDate1092 ) & localDateEnd.isAfter( localDate1092 )|localDateStart.isEqual( localDate1092 )) {
-            payment = nDays( datestart, dateend ) * 1.99f / 7;
+            payment = BigDecimal.valueOf(nDays( datestart, dateend ) * 1.99f / 7).setScale(2,RoundingMode.CEILING );
             rental.setPayment(payment);
         }
-        BigDecimal bd = new BigDecimal(payment).setScale( 2,RoundingMode.CEILING );
+
     }
 
 

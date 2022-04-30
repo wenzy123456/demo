@@ -2,11 +2,12 @@ package com.example.demo.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-@Table(name = "rentals")
+@Table(name="rentals")
 public class Rental implements Serializable {
 
   public   Rental(){
@@ -22,14 +23,14 @@ public class Rental implements Serializable {
     private LocalDate dateFinish;
 
     @Column(name="payment")
-    private float payment;
+    private BigDecimal payment;
 
     @Transient
     @ManyToMany(mappedBy = "rentals")
     private Set <Movie> movies;
 
 
-    public Rental(Long id, LocalDate dateStart, LocalDate dateFinish, float payment,Set<Movie>movies ) {
+    public Rental(Long id, LocalDate dateStart, LocalDate dateFinish, BigDecimal payment,Set<Movie>movies ) {
         this.id = id;
         this.dateStart = dateStart;
         this.dateFinish = dateFinish;
@@ -63,11 +64,11 @@ public class Rental implements Serializable {
         this.dateFinish = dateFinish;
     }
 
-    public float getPayment() {
+    public BigDecimal getPayment() {
         return payment;
     }
 
-    public void setPayment(float payment) {
+    public void setPayment(BigDecimal payment) {
         this.payment = payment;
     }
 

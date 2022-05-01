@@ -1,14 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Rental;
-import com.example.demo.entity.User;
 import com.example.demo.repository.RentalRepository;
-import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +11,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class RentalService {
-    @PersistenceContext
-    private EntityManager em;
+
 
     private RentalRepository rentalRepository;
 
@@ -55,9 +49,6 @@ public class RentalService {
         }
         return rental;
     }
-    public void saveAllRental (List<Rental>rentals) {
 
-        rentalRepository.saveAll(rentals);
-    }
 
 }

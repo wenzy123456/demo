@@ -1,6 +1,5 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Movie;
 import com.example.demo.entity.Rental;
 import org.springframework.data.jpa.repository.JpaRepository;
 

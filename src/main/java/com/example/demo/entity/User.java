@@ -16,7 +16,7 @@ public class User implements Serializable {
    @Column(name = "name")
     private String name;
 
-   @Column(name = "lastName")
+   @Column(name ="lastName")
     private String lastName;
 
    @Column(name = "email")
@@ -95,10 +95,6 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String userToString() {
-       return getId()+" "+getLastName()+ " "+ getName()+ " "+getEmail();
     }
 
 }

@@ -7,13 +7,7 @@ import java.util.List;
 
 public interface MovieRepository extends JpaRepository <Movie, Long> {
 
-    Movie findAllById(long id);
 
- /*
-
-    List<Movie>getMoviesByPriceCategory();
-
-    List<Movie>getMoviesByNameMovie();*/
 
   List <Movie> getMovieByDescription(String description);
 
@@ -22,7 +16,6 @@ public interface MovieRepository extends JpaRepository <Movie, Long> {
   List<Movie>getMovieByNameMovie(String nameMovie);
 
 
-  //List <Movie> getMovieByDateRelease_Year(LocalDate dateRelease);
 
 
 }

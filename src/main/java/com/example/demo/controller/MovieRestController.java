@@ -2,15 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Movie;
 import com.example.demo.entity.Rental;
-import com.example.demo.entity.User;
-import com.example.demo.repository.MovieRepository;
 import com.example.demo.service.MovieService;
-import com.example.demo.service.RentalService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zaxxer.hikari.util.ConcurrentBag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -34,13 +29,6 @@ public class MovieRestController {
     public void setMovieService(MovieService movieService) {
         this.movieService = movieService;
     }
-    private RentalService rentalService;
-    @Autowired
-    public void setRentalService(RentalService rentalService) {
-        this.rentalService = rentalService;
-    }
-
-
 
 
     @GetMapping(value = "/movies")
@@ -58,11 +46,6 @@ public class MovieRestController {
         return movieService.getMovieByActors(actors);
 
     }
-  /*  @GetMapping(value = "/movies/daterelease")
-    public List<Movie> getMovieByDaterelease(@RequestBody LocalDate release) {
-        return movieService.getMovieByDateRelease(release);
-
-    }*/
 
     @GetMapping(value = "/movies/namemovies")
     public List<Movie> getMovieByNameMovie(@RequestBody String nameMovie) {
@@ -114,7 +97,7 @@ public class MovieRestController {
             firstDate = df.parse( firstString );
             secondDate = df.parse( secondString );
         } catch (Exception e) {
-System.out.println("Wrong parce");
+         System.out.println("Wrong parse");
         }
         int nDay = (int) ((secondDate.getTime() - firstDate.getTime()) / (24 * 60 * 60 * 1000));
         return nDay;

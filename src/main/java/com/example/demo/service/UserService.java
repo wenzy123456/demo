@@ -5,8 +5,7 @@ import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -14,8 +13,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserService {
-    @PersistenceContext
-    private EntityManager em;
+
 
     private UserRepository userRepository;
 
@@ -53,9 +51,6 @@ public class UserService {
             user = optional.get();
         }
         return user;
-    }
-    public void saveAllUsers (List<User> users) {
-        userRepository.saveAll(users);
     }
 
 }

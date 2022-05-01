@@ -1,12 +1,8 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 

@@ -3,31 +3,25 @@ package com.example.demo.controller;
 import com.example.demo.entity.Movie;
 import com.example.demo.entity.Rental;
 import com.example.demo.entity.User;
-import com.example.demo.repository.MovieRepository;
-import com.example.demo.repository.UserRepository;
 import com.example.demo.service.MovieService;
 import com.example.demo.service.RentalService;
 import com.example.demo.service.UserService;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.http.HttpStatus;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class UserRestController {
@@ -53,59 +47,44 @@ public class UserRestController {
     }
 
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "/users")
     public List <User> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/users/{id}")
     public User getUserById(@PathVariable("id") int id) {
         return userService.getUserById(id);
     }
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "users/{id}")
     public void deleteUser(@PathVariable("id") int id) {
         User user = userService.getUserById(id);
         userService.removeUser(user);
     }
 
-
-    @PostMapping(value = "/")
-    public void addUser(@RequestBody User user) {
-     /*   LocalDate movieRelease = movie.getDateRelease();
-        System.out.println(movieRelease.toString());
-        movieRelease = LocalDate.of(2022, 03, 8);
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        Date firstDate = null;
-        Date secondDate = null;
-        try {
-            firstDate = df.parse(String.valueOf(movieRelease));
-            secondDate = df.parse(String.valueOf(LocalDate.now()));
-
-        } catch (Exception e) {
-
-        }
-
-        int nDay = (int) ((secondDate.getTime() - firstDate.getTime()) / (24 * 60 * 60 * 1000));
-        System.out.println(nDay);
-        if (nDay <= 364) {
-            movie.setPriceCategory("NEW 5 EUR/week");
-            movieService.addMovie(movie);
-        }
-        if ((nDay > 364) & (nDay <= 1092)) {
-            movie.setPriceCategory("USUAL 3.49 EUR/week");
-            movieService.addMovie(movie);
-        }
-        if (nDay > 1092) {
-            movie.setPriceCategory("OLD 1.99 EUR/week");
-            movieService.addMovie(movie);
-        }
-        else*/
+    //Rental[] rental;
+    @PostMapping(value = "/users")
+    public void addUser(@RequestBody User user) throws ParseException {
+        Set <Movie> movies = user.getMovies();
+        Movie []  movie = movies.toArray(new Movie[2]);
+       for(int i=0; i< movie.length; i++) {
+           Rental[] rental = movie[i].getRentals().toArray(new Rental[2]);
+     //  }
+      //  for(int i=0; i< movie.length; i++) {
+            LocalDate movieRelease = movie[i].getDateRelease();
+            String datemovie = movieRelease.toString();
+            String datenow = LocalDate.now().toString();
+            LocalDate rentalDateStart = rental[0].getDateStart();
+            LocalDate rentalDateFinish = rental[0].getDateFinish();
+            String datestart = rentalDateStart.toString();
+            String datefinish= rentalDateFinish.toString();
+            payment(rental[0],datemovie,datestart,datefinish);
+            movieCategory(movie[i], nDays(datemovie,datenow));
+       }
         userService.addUser(user);
-     //   movieService.addMovie(movie);
-      //  rentalService.addRental(rental);
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/users/{id}")
     public User updatUserById(@PathVariable("id") int id, @RequestBody User user) {
         User user1 = userService.getUserById(id);
         user1.setName(user.getName());
@@ -114,30 +93,85 @@ public class UserRestController {
         user1.setPassword(user.getPassword());
         return userService.updateUser(user1);
     }
-
-
-
-
-  /*  @RequestMapping("json")
-    public void json() {
-        // URL url= this.getClass().getClassLoader().getResource("classpath : users.json");
-        File jsonFile = null;
+    public  int nDays(String firstString, String secondString) {
+        SimpleDateFormat df = new SimpleDateFormat( "yyyy-MM-dd" );
+        Date firstDate = null;
+        Date secondDate = null;
         try {
-            jsonFile = ResourceUtils.getFile("src/main/resources/json/users.json");
-            ObjectMapper objectMapper = new ObjectMapper();
-            List <User> users = null;
-            try {
-                users = objectMapper.readValue(jsonFile, new TypeReference <List <User>>() {
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            userService.saveAllUsers(users);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }*/
+            firstDate = df.parse( firstString );
+            secondDate = df.parse( secondString );
+        } catch (Exception e) {
+            System.out.println("Wrong parse");
+        }
+        int nDay = (int) ((secondDate.getTime() - firstDate.getTime()) / (24 * 60 * 60 * 1000));
+        return nDay;
+    }
+    public  void movieCategory(Movie movie, int nDay) {
+        if (nDay <= 364) {
+            movie.setPriceCategory("NEW 5 EUR/week");
+           // movieService.addMovie(movie);
 
-/*    @Bean
+        }
+        if ((nDay > 365) & (nDay <= 1092)) {
+            movie.setPriceCategory("USUAL 3.49 EUR/week");
+           // movieService.addMovie(movie);
+
+        }
+        if ((nDay > 1092))  {
+            movie.setPriceCategory("OLD 1.99 EUR/week");
+          //  movieService.addMovie(movie);
+        }
+
+    }
+
+    public void payment(Rental rental, String datemovie, String datestart, String dateend) throws ParseException {
+        SimpleDateFormat df = new SimpleDateFormat( "yyyy-MM-dd" );
+        Date datem = df.parse( datemovie );
+        Date dates = df.parse( datestart );
+        Date datee = df.parse( dateend );
+        LocalDate localDateMovie = datem.toInstant().atZone( ZoneId.systemDefault() ).toLocalDate();
+        LocalDate localDate364 = datem.toInstant().atZone( ZoneId.systemDefault() ).toLocalDate().plusDays( 364 );
+        LocalDate localDate1092 = datem.toInstant().atZone( ZoneId.systemDefault() ).toLocalDate().plusDays( 1092 );
+        LocalDate localDateStart = dates.toInstant().atZone( ZoneId.systemDefault() ).toLocalDate();
+        LocalDate localDateEnd = datee.toInstant().atZone( ZoneId.systemDefault() ).toLocalDate();
+        String date364 = localDate364.toString();
+        String date1092 =localDate1092.toString();
+        BigDecimal payment = BigDecimal.valueOf(0);
+
+        if (nDays( datestart, dateend ) >= 365 | nDays(datestart,dateend)<0 |(localDateStart.isBefore( localDateMovie ) | localDateEnd.isBefore( localDateMovie ))) {
+            System.out.println("LAEN KEELATUD" );
+            return;
+
+        }
+
+        if (localDateStart.isBefore( localDate364 ) & localDateEnd.isBefore( localDate364 )| localDateEnd.isEqual( localDate364 )) {
+            payment = BigDecimal.valueOf((nDays( datestart, dateend )*5f/7)).setScale(2, RoundingMode.CEILING );
+            rental.setPayment(payment);
+
+        }
+        if ( localDateStart.isBefore( localDate364 ) & localDateEnd.isAfter( localDate364 ) & localDateEnd.isBefore( localDate1092 )| localDateStart.isEqual( localDate364 )) {
+            payment = BigDecimal.valueOf(nDays( datestart, date364 )*5f/7 + nDays( date364, dateend )* 3.49f/7).setScale(2,RoundingMode.CEILING );
+            rental.setPayment(payment);
+        }
+        if ( localDateStart.isBefore( localDate1092 ) & localDateEnd.isBefore( localDate1092 ) & localDateStart.isAfter( localDate364 )|localDateEnd.isEqual( localDate1092 )) {
+            payment = BigDecimal.valueOf(nDays( datestart, dateend ) * 3.49f/7).setScale(2,RoundingMode.CEILING );
+            rental.setPayment(payment);
+        }
+
+        if (localDateStart.isBefore( localDate1092 ) & localDateEnd.isAfter( localDate1092 )|localDateEnd.isEqual(localDate1092)) {
+            payment = BigDecimal.valueOf(nDays( datestart, date1092 )* 3.49f/7 + nDays( date1092, dateend )*1.99f/7).setScale(2,RoundingMode.CEILING );
+            rental.setPayment(payment);
+        }
+        if (localDateStart.isAfter( localDate1092 ) & localDateEnd.isAfter( localDate1092 )|localDateStart.isEqual( localDate1092 )) {
+            payment = BigDecimal.valueOf(nDays( datestart, dateend ) * 1.99f / 7).setScale(2,RoundingMode.CEILING );
+            rental.setPayment(payment);
+        }
+
+    }
+
+
+
+    /*    @Bean
     public List<User> dataDownload() {
         ObjectMapper objectMapper = new ObjectMapper();
         List <User> listusers = null;

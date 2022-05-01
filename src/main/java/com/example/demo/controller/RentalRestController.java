@@ -1,10 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.Movie;
+
 import com.example.demo.entity.Rental;
-import com.example.demo.entity.User;
 import com.example.demo.service.RentalService;
-import com.example.demo.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -60,7 +58,7 @@ public class RentalRestController {
    @Bean
     public List<Rental> rentalDataDownload(){
         ObjectMapper objectMapper = new ObjectMapper();
-        List<Rental> rentals = null;
+        List<Rental> rentals ;
         rentals = rentalService.getAllRental();
         try {
             objectMapper.writeValue(new File("src/main/resources/json/rentals.json"),rentals);

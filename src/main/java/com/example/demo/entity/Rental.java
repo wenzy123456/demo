@@ -25,8 +25,7 @@ public class Rental implements Serializable {
     @Column(name="payment")
     private BigDecimal payment;
 
-    @Transient
-    @ManyToMany(mappedBy = "rentals")
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set <Movie> movies;
 
 

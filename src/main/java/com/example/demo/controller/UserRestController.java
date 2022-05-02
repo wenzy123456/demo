@@ -62,11 +62,11 @@ public class UserRestController {
         userService.removeUser(user);
     }
 
-    //Rental[] rental;
+
     @PostMapping(value = "/users")
     public void addUser(@RequestBody User user) throws ParseException {
         Set <Movie> movies = user.getMovies();
-        List<Movie> movie = new ArrayList <>(movies);
+        List<Movie> movie = new ArrayList <Movie>(movies);
         if(movie.size()==0){
             userService.addUser(user);
             return;
@@ -87,12 +87,30 @@ public class UserRestController {
     }
 
     @PutMapping(value = "/users/{id}")
-    public User updatUserById(@PathVariable("id") int id, @RequestBody User user) {
+    public User updatUserById(@PathVariable("id") int id, @RequestBody User user) throws ParseException {
         User user1 = userService.getUserById(id);
         user1.setName(user.getName());
         user1.setLastName(user.getLastName());
         user1.setEmail(user.getEmail());
         user1.setPassword(user.getPassword());
+        Set<Movie>movies = user.getMovies();
+        List<Movie> movie = new ArrayList <Movie>(movies);
+        if(movie.size()==0) {
+            userService.updateUser(user1);
+        }
+        for(int i=0; i< movie.size(); i++) {
+            Rental[] rental = movie.get(i).getRentals().toArray(new Rental[0]);
+            LocalDate movieRelease = movie.get(i).getDateRelease();
+            String datemovie = movieRelease.toString();
+            String datenow = LocalDate.now().toString();
+            LocalDate rentalDateStart = rental[0].getDateStart();
+            LocalDate rentalDateFinish = rental[0].getDateFinish();
+            String datestart = rentalDateStart.toString();
+            String datefinish= rentalDateFinish.toString();
+            payment(rental[0],datemovie,datestart,datefinish);
+            movieCategory(movie.get(i), nDays(datemovie,datenow));
+        }
+        user1.setMovies(user.getMovies());
         return userService.updateUser(user1);
     }
     public  int nDays(String firstString, String secondString) {
@@ -147,25 +165,25 @@ public class UserRestController {
         }
 
         if (localDateStart.isBefore( localDate364 ) & localDateEnd.isBefore( localDate364 )| localDateEnd.isEqual( localDate364 )) {
-            payment = BigDecimal.valueOf((nDays( datestart, dateend )*5f/7)).setScale(2, RoundingMode.CEILING );
+            payment = BigDecimal.valueOf((nDays( datestart, dateend )*5f/7)).setScale(2, RoundingMode.DOWN );
             rental.setPayment(payment);
 
         }
         if ( localDateStart.isBefore( localDate364 ) & localDateEnd.isAfter( localDate364 ) & localDateEnd.isBefore( localDate1092 )| localDateStart.isEqual( localDate364 )) {
-            payment = BigDecimal.valueOf(nDays( datestart, date364 )*5f/7 + nDays( date364, dateend )* 3.49f/7).setScale(2,RoundingMode.CEILING );
+            payment = BigDecimal.valueOf(nDays( datestart, date364 )*5f/7 + nDays( date364, dateend )* 3.49f/7).setScale(2,RoundingMode.DOWN );
             rental.setPayment(payment);
         }
         if ( localDateStart.isBefore( localDate1092 ) & localDateEnd.isBefore( localDate1092 ) & localDateStart.isAfter( localDate364 )|localDateEnd.isEqual( localDate1092 )) {
-            payment = BigDecimal.valueOf(nDays( datestart, dateend ) * 3.49f/7).setScale(2,RoundingMode.CEILING );
+            payment = BigDecimal.valueOf(nDays( datestart, dateend ) * 3.49f/7).setScale(2,RoundingMode.DOWN );
             rental.setPayment(payment);
         }
 
         if (localDateStart.isBefore( localDate1092 ) & localDateEnd.isAfter( localDate1092 )|localDateEnd.isEqual(localDate1092)) {
-            payment = BigDecimal.valueOf(nDays( datestart, date1092 )* 3.49f/7 + nDays( date1092, dateend )*1.99f/7).setScale(2,RoundingMode.CEILING );
+            payment = BigDecimal.valueOf(nDays( datestart, date1092 )* 3.49f/7 + nDays( date1092, dateend )*1.99f/7).setScale(2,RoundingMode.DOWN );
             rental.setPayment(payment);
         }
         if (localDateStart.isAfter( localDate1092 ) & localDateEnd.isAfter( localDate1092 )|localDateStart.isEqual( localDate1092 )) {
-            payment = BigDecimal.valueOf(nDays( datestart, dateend ) * 1.99f / 7).setScale(2,RoundingMode.CEILING );
+            payment = BigDecimal.valueOf(nDays( datestart, dateend ) * 1.99f / 7).setScale(2,RoundingMode.DOWN );
             rental.setPayment(payment);
         }
 

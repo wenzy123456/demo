@@ -18,8 +18,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -66,12 +66,14 @@ public class UserRestController {
     @PostMapping(value = "/users")
     public void addUser(@RequestBody User user) throws ParseException {
         Set <Movie> movies = user.getMovies();
-        Movie []  movie = movies.toArray(new Movie[2]);
-       for(int i=0; i< movie.length; i++) {
-           Rental[] rental = movie[i].getRentals().toArray(new Rental[2]);
-     //  }
-      //  for(int i=0; i< movie.length; i++) {
-            LocalDate movieRelease = movie[i].getDateRelease();
+        List<Movie> movie = new ArrayList <>(movies);
+        if(movie.size()==0){
+            userService.addUser(user);
+            return;
+        }
+       for(int i=0; i< movie.size(); i++) {
+            Rental[] rental = movie.get(i).getRentals().toArray(new Rental[0]);
+            LocalDate movieRelease = movie.get(i).getDateRelease();
             String datemovie = movieRelease.toString();
             String datenow = LocalDate.now().toString();
             LocalDate rentalDateStart = rental[0].getDateStart();
@@ -79,7 +81,7 @@ public class UserRestController {
             String datestart = rentalDateStart.toString();
             String datefinish= rentalDateFinish.toString();
             payment(rental[0],datemovie,datestart,datefinish);
-            movieCategory(movie[i], nDays(datemovie,datenow));
+            movieCategory(movie.get(i), nDays(datemovie,datenow));
        }
         userService.addUser(user);
     }

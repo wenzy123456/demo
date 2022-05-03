@@ -31,10 +31,6 @@ public class Movie implements Serializable {
      @Column(name="description")
      private String description;
 
-    @Transient
-    @ManyToMany(mappedBy = "movies")
-     private Set <User> users;
-
     @JoinTable(
             name = "movies_rentals"
             , joinColumns = {
@@ -45,37 +41,16 @@ public class Movie implements Serializable {
     }
     )
 
-
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<Rental> rentals;
 
-
-   public Set <User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set <User> users) {
-        this.users = users;
-    }
 
     public Set<Rental> getRentals() {
         return rentals;
     }
 
-    public void setRentals(Set<Rental> rentals) {
-        this.rentals = rentals;
-    }
 
-    public Movie(Long id, LocalDate dateRelease, String nameMovie, String priceCategory, String actors, String description,Set<Rental> rentals,Set<User>users) {
-        this.id = id;
-        this.dateRelease = dateRelease;
-        this.nameMovie = nameMovie;
-        this.priceCategory = priceCategory;
-        this.actors = actors;
-        this.description = description;
-        this.rentals =rentals;
-        this.users=users;
-    }
+
 
     public Movie() {
   }

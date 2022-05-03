@@ -132,7 +132,7 @@ public class MovieRestController {
         LocalDate localDateEnd = datee.toInstant().atZone( ZoneId.systemDefault() ).toLocalDate();
         String date364 = localDate364.toString();
         String date1092 =localDate1092.toString();
-        BigDecimal payment = BigDecimal.valueOf(0);
+        BigDecimal payment;
 
         if (nDays( datestart, dateend ) >= 365 | nDays(datestart,dateend)<0 |(localDateStart.isBefore( localDateMovie ) | localDateEnd.isBefore( localDateMovie ))) {
             System.out.println("LAEN KEELATUD" );
@@ -169,7 +169,7 @@ public class MovieRestController {
    @Bean
     public List<Movie> movieDataDownload(){
         ObjectMapper objectMapper = new ObjectMapper();
-        List<Movie> movies = null;
+        List<Movie> movies ;
         movies = movieService.getAllMovies();
         try {
             objectMapper.writeValue(new File("src/main/resources/json/movies.json"),movies);

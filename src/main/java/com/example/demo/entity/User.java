@@ -34,6 +34,7 @@ public class User implements Serializable {
             @JoinColumn(name = "movies_id")
     }
     )
+
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<Movie> movies;
 
@@ -43,15 +44,6 @@ public class User implements Serializable {
 
     public void setMovies(Set <Movie> movies) {
         this.movies = movies;
-    }
-
-    public User(String name, String lastName, String email, String password,Set<Movie>movies) {
-        this.name = name;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.movies= movies;
-
     }
 
     public User() {

@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Set;
+
 
 @Entity
 @Table(name="rentals")
@@ -24,20 +24,6 @@ public class Rental implements Serializable {
 
     @Column(name="payment")
     private BigDecimal payment;
-
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private Set <Movie> movies;
-
-
-    public Rental(Long id, LocalDate dateStart, LocalDate dateFinish, BigDecimal payment,Set<Movie>movies ) {
-        this.id = id;
-        this.dateStart = dateStart;
-        this.dateFinish = dateFinish;
-        this.payment = payment;
-        this.movies=movies;
-
-    }
-
 
     public Long getId() {
         return id;

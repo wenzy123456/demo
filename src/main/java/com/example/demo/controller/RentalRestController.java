@@ -55,33 +55,5 @@ public class RentalRestController {
         rental1.setPayment(rental.getPayment());
         return rentalService.updateRental(rental1);
     }
-   @Bean
-    public List<Rental> rentalDataDownload(){
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<Rental> rentals ;
-        rentals = rentalService.getAllRental();
-        try {
-            objectMapper.writeValue(new File("src/main/resources/json/rentals.json"),rentals);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return rentals;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

@@ -13,7 +13,6 @@ public class Movie implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-
     private Long id;
 
     @Column(name="dateRelease")
@@ -30,6 +29,7 @@ public class Movie implements Serializable {
 
      @Column(name="description")
      private String description;
+
 
     @JoinTable(
             name = "movies_rentals"

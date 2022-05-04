@@ -89,7 +89,7 @@ public class MovieRestController {
         movie1.setDescription(movie.getDescription());
         return movieService.updateMovie(movie1);
     }
-    public  int nDays(String firstString, String secondString) {
+    public  int nDays(String firstString, String secondString)throws NullPointerException{
         SimpleDateFormat df = new SimpleDateFormat( "yyyy-MM-dd" );
         Date firstDate = null;
         Date secondDate = null;
@@ -99,8 +99,7 @@ public class MovieRestController {
         } catch (Exception e) {
          System.out.println("Wrong parse");
         }
-        int nDay = (int) ((secondDate.getTime() - firstDate.getTime()) / (24 * 60 * 60 * 1000));
-        return nDay;
+        return  (int) (((secondDate != null ? secondDate.getTime() : 0) -((firstDate != null ? firstDate.getTime() : 0) ) / (24 * 60 * 60 * 1000)));
     }
     public  void movieCategory(Movie movie, int nDay) {
         if (nDay <= 364) {
@@ -179,6 +178,4 @@ public class MovieRestController {
         }
         return movies;
     }
-
-
 }

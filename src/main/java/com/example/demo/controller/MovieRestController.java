@@ -50,8 +50,17 @@ public class MovieRestController {
     @GetMapping(value = "/movies/namemovies")
     public List<Movie> getMovieByNameMovie(@RequestBody String nameMovie) {
         return movieService.getMovieByName(nameMovie);
-
     }
+
+    @GetMapping(value = "/movies/pricecategory")
+    public List<Movie> getMovieByPriceCategory(@RequestBody String priceCategory) {
+        return movieService.getMovieByPriceCategory(priceCategory);
+    }
+
+   // @GetMapping(value = "/movies/daterealase")
+   // public List<Movie>getMovieByDateRelease(@RequestBody LocalDate date) {
+    //    return movieService.getMoviesByDateRelease(date);
+   // }
 
     @GetMapping(value = "/movies/{id}")
     public Movie geMovieById(@PathVariable("id") int id) {

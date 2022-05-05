@@ -50,5 +50,4 @@ public class RentalService {
         return rental;
     }
 
-
 }

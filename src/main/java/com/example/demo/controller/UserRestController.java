@@ -65,7 +65,7 @@ public class UserRestController {
 
     private void movies(List <Movie> movie) throws ParseException {
         for (Movie value : movie) {
-            Rental[] rental = value.getRentals().toArray(new Rental[0]);
+          Rental[] rental = value.getRentals().toArray(new Rental[0]);
             LocalDate movieRelease = value.getDateRelease();
             String datemovie = movieRelease.toString();
             String datenow = LocalDate.now().toString();

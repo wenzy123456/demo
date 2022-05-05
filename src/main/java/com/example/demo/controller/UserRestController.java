@@ -162,6 +162,11 @@ public class UserRestController {
         }
     }
 
+    @GetMapping(value = "/queryusers")
+    public List <User>findAllUsersByNative() {
+        return userService.findAllUsersByNativeQuery();
+    }
+
     /*    @Bean
     public List<User> dataDownload() {
         ObjectMapper objectMapper = new ObjectMapper();

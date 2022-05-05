@@ -29,12 +29,16 @@ public class MovieRestController {
     public void setMovieService(MovieService movieService) {
         this.movieService = movieService;
     }
+    @GetMapping(value = "/querymovies")
+    public List <Movie>findAllMoviesByNative() {
+        return movieService.findAllByNativeQuery();
+    }
+
 
 
     @GetMapping(value = "/movies")
     public List <Movie> getAllMovies() {
         return movieService.getAllMovies();
-
     }
     @GetMapping(value = "/movies/description")
     public List<Movie> getMovieByDescription(@RequestBody String description) {

@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Movie;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,5 +57,16 @@ public class UserService {
         }
         return user;
     }
+    final static String QUERY = "select * from users\n" +
+            "join users_movies ON users_movies.users_id = users.id\n" +
+            "join movies on movies.id =users_movies.movies_id \n" +
+            "join movies_rentals ON movies_rentals.movies_id = users_movies.movies_id\n" +
+            "join rentals ON rentals.id=movies_rentals.rentals_id\n" +
+            "where users.id=1;";
+    public List<User> findAllUsersByNativeQuery() {
+        return em.createNativeQuery(QUERY, User.class).getResultList();
+    }
+
+
 
 }

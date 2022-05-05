@@ -30,6 +30,9 @@ public class Movie implements Serializable {
      @Column(name="description")
      private String description;
 
+     @Column(name="rented")
+     private boolean rented;
+
 
     @JoinTable(
             name = "movies_rentals"
@@ -49,8 +52,17 @@ public class Movie implements Serializable {
         return rentals;
     }
 
+    public boolean isRented() {
+        return rented;
+    }
 
+    public void setRented(boolean rented) {
+        this.rented = rented;
+    }
 
+    public void setRentals(Set <Rental> rentals) {
+        this.rentals = rentals;
+    }
 
     public Movie() {
   }
@@ -104,4 +116,7 @@ public class Movie implements Serializable {
         this.description = description;
     }
 
+    boolean checkOut(Movie movie){
+      return movie.isRented();
+    }
 }

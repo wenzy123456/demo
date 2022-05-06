@@ -163,8 +163,8 @@ public class UserRestController {
     }
 
     @GetMapping(value = "/queryusers")
-    public List <User>findAllUsersByNative() {
-        return userService.findAllUsersByNativeQuery();
+    public List <User>findAllUsersByNative(@RequestBody String s) {
+        return userService.findAllByNativeQuery(s);
     }
 
     /*    @Bean

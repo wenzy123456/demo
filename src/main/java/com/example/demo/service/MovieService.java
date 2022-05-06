@@ -74,12 +74,10 @@ public class MovieService {
     public List<Movie> getMovieByPriceCategory(String priceCategory) {
         return movieRepository.getMoviesByPriceCategoryContains(priceCategory);
     }
- // public List<Movie>getMoviesByDateRelease(LocalDate date){
-  //    return movieRepository.getByDateReleaseYearIsLikeIgnoreCase(date);
-   // }
- final static String QUERY = "select * from movies";
-    public List<Movie> findAllByNativeQuery() {
-        return em.createNativeQuery(QUERY, Movie.class).getResultList();
+
+ final static String QUERY = "select * from movies where date_release =";
+    public List<Movie> findMovieByDateRelease(String s) {
+        return em.createNativeQuery(QUERY +s, Movie.class).getResultList();
     }
 
 

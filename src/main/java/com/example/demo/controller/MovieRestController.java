@@ -23,18 +23,11 @@ public class MovieRestController {
     public MovieRestController() {
     }
 
-
     private MovieService movieService;
     @Autowired
     public void setMovieService(MovieService movieService) {
         this.movieService = movieService;
     }
-    @GetMapping(value = "/querymovies")
-    public List <Movie>findAllMoviesByNative() {
-        return movieService.findAllByNativeQuery();
-    }
-
-
 
     @GetMapping(value = "/movies")
     public List <Movie> getAllMovies() {
@@ -51,7 +44,7 @@ public class MovieRestController {
 
     }
 
-    @GetMapping(value = "/movies/namemovies")
+    @GetMapping(value = "/movies/namemovie")
     public List<Movie> getMovieByNameMovie(@RequestBody String nameMovie) {
         return movieService.getMovieByName(nameMovie);
     }
@@ -61,10 +54,10 @@ public class MovieRestController {
         return movieService.getMovieByPriceCategory(priceCategory);
     }
 
-   // @GetMapping(value = "/movies/daterealase")
-   // public List<Movie>getMovieByDateRelease(@RequestBody LocalDate date) {
-    //    return movieService.getMoviesByDateRelease(date);
-   // }
+    @GetMapping(value = "/movies/daterelease")
+    public List<Movie>getMovieByDateRelease(@RequestBody String s) {
+        return movieService.findMovieByDateRelease(s);
+    }
 
     @GetMapping(value = "/movies/{id}")
     public Movie geMovieById(@PathVariable("id") int id) {

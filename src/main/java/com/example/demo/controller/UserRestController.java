@@ -17,10 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 public class UserRestController {
@@ -64,20 +61,24 @@ public class UserRestController {
     }
 
     private void movies(List <Movie> movie) throws ParseException {
-        for (Movie value : movie) {
-          Rental[] rental = value.getRentals().toArray(new Rental[0]);
-            LocalDate movieRelease = value.getDateRelease();
-            String datemovie = movieRelease.toString();
-            String datenow = LocalDate.now().toString();
-            LocalDate rentalDateStart = rental[0].getDateStart();
-            LocalDate rentalDateFinish = rental[0].getDateFinish();
-            String datestart = rentalDateStart.toString();
-            String datefinish = rentalDateFinish.toString();
-            payment(rental[0], datemovie, datestart, datefinish);
-            movieCategory(value, nDays(datemovie, datenow));
+        for (Movie valueMovie : movie) {
+            // Rental[] rental = value.getRentals().toArray(new Rental[0]);
+            Set <Rental> rentals = valueMovie.getRentals();
+            List <Rental> rental = new ArrayList <>(rentals);
+
+            for (Rental valueRental : rental) {
+                LocalDate movieRelease = valueMovie.getDateRelease();
+                String datemovie = movieRelease.toString();
+                String datenow = LocalDate.now().toString();
+                LocalDate rentalDateStart = valueRental.getDateStart();
+                LocalDate rentalDateFinish = valueRental.getDateFinish();
+                String datestart = rentalDateStart.toString();
+                String datefinish = rentalDateFinish.toString();
+                payment(valueRental, datemovie, datestart, datefinish);
+                movieCategory(valueMovie, nDays(datemovie, datenow));
+            }
         }
     }
-
     @PutMapping(value = "/users/{id}")
     public User updatUserById(@PathVariable("id") int id, @RequestBody User user) throws ParseException {
         User user1 = userService.getUserById(id);

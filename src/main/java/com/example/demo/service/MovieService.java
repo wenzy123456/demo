@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,11 +75,8 @@ public class MovieService {
     }
 
  final static String QUERY = "select * from movies where date_release =";
-    public List<Movie> findMovieByDateRelease(String s) {
-        return em.createNativeQuery(QUERY +s, Movie.class).getResultList();
-    }
-
-
-
+    public List<Movie> findMovieByDateRelease(String date) {
+       return em.createNativeQuery(QUERY + date, Movie.class).getResultList();
+   }
 
 }

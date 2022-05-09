@@ -5,14 +5,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
 
 @Entity
 @Table(name="rentals")
 public class Rental implements Serializable {
-
-  public   Rental(){
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -25,6 +23,15 @@ public class Rental implements Serializable {
 
     @Column(name="payment")
     private BigDecimal payment;
+
+
+    @Transient
+    @ManyToMany(mappedBy = "rentals")
+    private Set <Movie> movies;
+
+    public Rental() {
+
+    }
 
     public Long getId() {
         return id;

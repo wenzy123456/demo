@@ -55,8 +55,8 @@ public class MovieRestController {
     }
 
     @GetMapping(value = "/movies/daterelease")
-    public List<Movie>getMovieByDateRelease(@RequestBody String s) {
-        return movieService.findMovieByDateRelease(s);
+    public List<Movie>getMovieByDateRelease(@RequestBody String date) {
+        return movieService.findMovieByDateRelease(date);
     }
 
     @GetMapping(value = "/movies/{id}")

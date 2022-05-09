@@ -47,6 +47,10 @@ public class Movie implements Serializable {
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<Rental> rentals;
 
+    @Transient
+    @ManyToMany(mappedBy = "movies")
+    private Set<User> users;
+
 
     public Set<Rental> getRentals() {
         return rentals;
@@ -116,7 +120,5 @@ public class Movie implements Serializable {
         this.description = description;
     }
 
-    boolean checkOut(Movie movie){
-      return movie.isRented();
-    }
+
 }

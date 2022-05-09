@@ -3,6 +3,8 @@ package com.example.demo.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 
@@ -48,6 +50,9 @@ public class User implements Serializable {
 
     public User() {
     }
+    public User (Set<Movie> movies){
+
+    }
 
     public Long getId() {
         return id;
@@ -87,6 +92,15 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+
+    public void checkOut(User user){
+        Set<Movie> movies = user.getMovies();
+        List<Movie> movie = new ArrayList <>(movies);
+        for (Movie valueMovie : movie) {
+            valueMovie.setRented(true);
+        }
     }
 
 }
